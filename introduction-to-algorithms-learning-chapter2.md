@@ -1,7 +1,7 @@
 ---
 title: 算法导论研读与分析（二）
 date: 2013-06-23 10:00:00
-tags: 算法导论，算法分析，最大子数组，分治，动态规划
+tags: 最大子数组，分治，动态规划
 author: maclaon
 comments: false
 ---
@@ -97,7 +97,7 @@ public int findMaxArraySum(List<Integer> A, int low, int high){
 
 $$T(n)=2T(n/2)+\Theta(n)$$
 
-对于数学递归式子的求解请看[数学递归求解]()。
+对于数学递归式子的求解请看[数学递归求解](http://shieldme.cn/2013/07/14/introduction-to-algorithms-learning-chapter3/)。
 
 ### 动态规划
 稍后继续!
