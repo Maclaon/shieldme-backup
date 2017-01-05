@@ -1,7 +1,7 @@
 ---
 title: 算法导论研读与分析（十一）
 date: 2013-09-23 10:00:00
-tags: 数据结构，图
+tags: 数据结构，图，存储
 author: maclaon
 comments: false
 ---
@@ -33,6 +33,12 @@ comments: false
 ![](http://images.cnitblog.com/blog/311549/201309/23224325-da52aadcae4b456389fb9268dd51d1b8.jpg)
 
 + 强连通图（有向图）
+在一个强连通图中，任意两个点都通过一定路径互相连通。
+
+![](http://pic002.cnblogs.com/images/2010/150814/2010110807295234.png)
+
+上图1是强连通图，而图2不是，因为没有一条路使得点4到达点1、2或3。
+
 + 网
 带”权值”的连通图称为网。如图所示:
 ![](http://images.cnitblog.com/blog/311549/201309/23224328-7192059395f34ded9fd3ea3f2335b566.jpg)
