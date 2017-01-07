@@ -78,6 +78,46 @@ $$N_{tasks}=N_{stages} * N_{partition}$$
 > + Consumer parallelism: $$N_{consumers}$$
 > + Spark parallelism: $$N_{spark.cores.max} - N_{consumers}$$
 
+## Spark.cores.max
+为了增大数据本地化和并发性，减少数据的网络传输而带来的性能消耗，$$N_{spark.cores.max}$$应该是$$N_consumers$$的个数，比如：移动广告平台的时候，创建了8个`consumers`来进行数据收集，那么$$N_{spark.cores.max}=16$$或者$$N_{spark.cores.max}=24$$
+
+## Partitions
+先前说过，减少分区的数量对降低整个处理的时间是非常重要的，因为会导致更少的任务量，所以一次处理更多的数据变的非常重要。
+
+> 那么在`DStream`中我们设置多少个`partitions`给一个`RDD`合适呢？
+
+首先看下`partitions`是如何产生的。每一次`receiver`获取数据，数据有`Receiver`提供给`executor`，`ReceiverSupervisor`用来管理`blocks`，在`batch interval`时间间隔内每一个`block`成为`RDD`的一个`partition`的一部分。这些`blocks`的大小是跟时间有关的并且是由以下参数来设置的(200毫秒是默认的值).
+
+$$T_{spark.streaming.blockInterval} = 200$$
+
+假设每个`consumer`产生的数据形成的`blocks`数目的能力是一致的，由此可以得出一个`RDD`中的`partitions`数目为:
+
+$$N_{partitions}=N_{consumers} * T_{batchIntervalMillis}\;/\; T_{blockInterval}$$
+
+> 那么如何设置$$T_{spark.streaming.blockInterval}$$ ?
+
+增大$$T_{spark.streaming.blockInterval}$$将会减少一个`RDD`上的分区`partitions`的个数以及一个`batch`的`tasks`数目。$$T_{spark.streaming.blockInterval}$$必须是$$T_{batchIntervalMillis}$$的倍数。根据Spark的官方建议每一个`partition`需要$$2,3$$倍可用的`cores`，可以得出。
+> + $$T_{bacthIntervalMillis}$$: `batch Interval`毫秒范围的值
+> + $$T_{spark.cores.max}$$: 作业提交的时候设置的最大核数
+> + $$N_{consumers}$$: 创建的`consumers`的个数
+> + 那么`available cores`为: $$N_{sparkCores}\;=\;T_{spark.cores.max} - N_{consumers}$$
+> + 一个核数可以处理多少个`partitions`: $$N_{partitionFactor}\;=\;N_{partitions}\;/\;N_{core}$$，如官网建议的一个`partition`可以有$$2,3$$倍，可以设置$$N_{partitionFactor}\;=\;2$$
+
+$$T_{spark.streaming.blockInterval}=T_{bacthIntervalMillis}*N_{consumers}\;/\;(N_{partitionFactor} * N_{sparkCores})$$
+
+例如：$$T_{spark.cores.max}\;=12\;$$，设置$$4$$个consumers，这样$$N_{sparkCores}=\;12\;-\;4\;=\;8$$。同时设置$$T_{bacthIntervalMillis}=6s$$，并且认为$$N_{partitionFactor}=2$$，可以得出:
+
+$$T_{spark.streaming.blockInterval}\;=\;6000\;*\;4\;/\;(2\;*\;8)\;=1500\;ms$$
+
+
+# 移动广告平台实时调优
+
+
+
+
+
+
+
 # 结果
 
 ![](http://oh8mi0yav.bkt.clouddn.com/spark-streaming-processing-on-app-ads-statistic)
