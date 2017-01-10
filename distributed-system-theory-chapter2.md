@@ -1,6 +1,6 @@
 ---
 title: 分布式理论（二）
-date: 2015-01-23 10:00:00
+date: 2015-01-25 10:00:00
 tags: 分布式理论，概念
 author: maclaon
 comments: false
