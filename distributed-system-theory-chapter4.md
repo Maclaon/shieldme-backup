@@ -73,4 +73,4 @@ primary-secondary协议的数据更新流程:
 
 ![](http://oh8mi0yav.bkt.clouddn.com/data-replic-no-center-node-in-distribute-system.png)
 
-Paxos是唯一在工程中得到应用的强一致性去中心化副本控制协议。
+**Paxos是唯一在工程中得到应用的强一致性去中心化副本控制协议**。
