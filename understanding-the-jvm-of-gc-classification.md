@@ -40,6 +40,10 @@ Generation）。其中持久代主要存放的是Java类的类信息，与垃圾
 > + System.gc()被主动调用
 
 ## 总结
+> + 对象有限在Eden区分配
+> + 大对象直接进入老年代，写程序的时候避免出现朝生夕死的短命的大对象。
+> + 长期存活的对象将进入老年代，对象在Survivor区每熬过一次Minor Gc，年龄就增加1岁，当它的年龄增加到一定程度（默认是15），就会被晋升为老年区。
+> 
 ![](http://oh8mi0yav.bkt.clouddn.com/gc-implementation.png)
 
 
