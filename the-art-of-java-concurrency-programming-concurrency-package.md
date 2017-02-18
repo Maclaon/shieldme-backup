@@ -76,5 +76,92 @@ public class CountDownLatchTest {
 CountDownLatch的构造函数接收`int`类型的参数作为计数器，如果你想等待$$N$$个点完成，这里就传入$$N$$。当调用CountDownLatch的`countDown`方法时，$$N$$就会减$$1$$，`CountDownLatch`的`await`方法会阻塞当前线程，直到$$N$$变成零。由于`countDown`方法可以用在任何地方，所以这里说的$$N$$个点，可以是$$N$$个线程，也可以是$$1$$个线程里的$$N$$个执行步骤。用在多个线程时，只需要把这个`CountDownLatch`引用传递到线程里即可。同样，可以有等待超时的方法，在线程没有在规定时间内执行完，就不会阻塞当前线程。
 
 ## 同步屏障`CyclicBarrier`
+`CyclicBarrier`的字面意思是可循环使用的屏障。让一组线程到达一个屏障(也可以是同步点)时被阻塞，直到最后一个线程到达屏障时，屏障才会开门，所有被屏障拦截的线程才会继续运行。
+
+### 说明
+每个线程调用`await`方法告诉`CyclicBarrier`我已经到达屏障，然后当前线程被阻塞。示例代码如下:
+
+```Java
+public class CyclicBarrierTest {
+	staticCyclicBarrier c = new CyclicBarrier(2);
+	
+	public static void main(String[] args) {
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					c.await();
+				} catch(Exception e){
+				
+				}
+				System.out.println(1);
+			}
+		}).start();
+		
+		try {
+			c.await();
+		} catch(Exception e) {
+		}
+		
+		System.out.println(2);
+	}
+}
+```
+因为主线程和子线程的调度由CPU决定，两个线程都有可能先执行，所以会产生两种输出。
+
+``` Python
+1
+2
+```
+或者
+
+``` Python
+2
+1
+```
+
+如果把`new CyclicBarrier(2)`改为`new CyclicBarrier(3)`，则主线程和子线程会永远等待，因为没有第三个线程执行`await`方法，即没有第三个线程到达屏障，所以之前到达屏障的两个线程都不会继续执行。`CyclicBarrier`还提供一个更高级的构造函数`CyclicBarrier(int parties, Runnable barrierAction)`，用于在线程到达屏障时，优先执行`barrierAction`，方便处理更复杂的业务场景。
+
+### `CyclicBarrier`和`CountDownLatch`的区别
+> + `CountDownLatch`的计数器只能使用一次，而`CyclicBarrier`的计数器可以使用`reset()`方法重置。所以`CyclicBarrier`能处理更为复杂的业务场景。除此之外`CyclicBarrier`还提供其他有用的方法。
+
+### 应用场景
+目前在设计前后端数据透出的时候，前端在调用各种数据的服务接口的时候，将数据进行组装，有的时候需要等到某个数据的来临后，才能进一步的做后续的操作。
+
 ## 控制并发线程数的`Semaphore`
+> `Semaphore`是用来控制同时访问特定资源的线程数量，它通过协调各个线程，以保证合理的使用公共资源。从字面意义上很难理解`Semaphore`，只能把它比作是控制流量的红绿灯。
+
+### 应用场景
+`Semaphore`可以用于做流量控制，特别是公用资源有限的应用场景，比如数据库链接。假如有一个需求，需要读取几万个文件的数据，因为都是IO密集型的，可以启动几十个线程并发的读取，但是如果读到内存后，还需要存储到数据库中，而数据库的连接数只有$$10$$个，这个时候必须控制只有$$10$$个线程同时获取数据库，否则会报错无法获取数据库链接。这个时候就需要使用`Semaphore`来做流量控制。
+
+``` Java
+public class SemaphoreTest {
+	private static final int THREAD_COUNT = 30;
+	private static ExecutorServierThreadPool = Executors.newFixedThreadPool(THREAD_COUNT);
+	private static Semaphore s = new Semaphore(10);
+	
+	private static void main(String[] args) {
+		for( int i = 0; i < THREAD_COUNT; i++ ) {
+			threadPool.execute(new Runnable() {
+				@Override
+				public void run(){
+					try {
+						s.acquire();
+						System.out.println("save data");
+						s.release();
+					} catch (InterruptedExecption e) {
+					
+					}
+				}
+			});
+		}
+		
+		threadPool.shutdown();
+	}
+}
+```
+
+代码中，虽然有$$30$$个线程在执行，但是只允许$$10$$个并发执行。
+
+
 ## 线程间交换数据的`Exchanger`
