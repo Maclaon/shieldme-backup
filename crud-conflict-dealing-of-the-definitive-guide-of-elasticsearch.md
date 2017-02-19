@@ -18,4 +18,4 @@ comments: false
 
 <!--more-->
 
-elasticsearch的`_version`可以由外置的信息来进行设置，可以是数据的timestamp，可以是自己自定义状态的数据。但是请注意，如果使用外置的`_version`来标识的话，不是向先前自动升级那样看当前的`_version`与请求的`_version`是否相同，外置的`_version`如果小于请求的`_version`的话，才会用心的`_version`来对其进行存储。
+elasticsearch的`_version`可以由外置的信息来进行设置，可以是数据的timestamp，可以是自己自定义状态的数据。**但是请注意，如果使用外置的`_version`来标识的话，不是向先前自动升级那样看当前的`_version`与请求的`_version`是否相同，外置的`_version`如果小于请求的`_version`的话，才会用心的`_version`来对其进行存储。**
