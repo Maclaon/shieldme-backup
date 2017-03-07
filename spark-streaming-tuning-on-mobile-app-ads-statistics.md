@@ -79,7 +79,7 @@ $$N_{tasks}=N_{stages} * N_{partition}$$
 > + Spark parallelism: $$N_{spark.cores.max} - N_{consumers}$$
 
 ## Spark.cores.max
-为了增大数据本地化和并发性，减少数据的网络传输而带来的性能消耗，$$N_{spark.cores.max}$$应该是$$N_consumers$$的个数，比如：移动广告平台的时候，创建了8个`consumers`来进行数据收集，那么$$N_{spark.cores.max}=16$$或者$$N_{spark.cores.max}=24$$
+为了增大数据本地化和并发性，减少数据的网络传输而带来的性能消耗，$$N_{spark.cores.max}$$应该是$$N_{consumers}$$的个数，比如：移动广告平台的时候，创建了8个`consumers`来进行数据收集，那么$$N_{spark.cores.max}=16$$或者$$N_{spark.cores.max}=24$$
 
 ## Partitions
 先前说过，减少分区的数量对降低整个处理的时间是非常重要的，因为会导致更少的任务量，所以一次处理更多的数据变的非常重要。
