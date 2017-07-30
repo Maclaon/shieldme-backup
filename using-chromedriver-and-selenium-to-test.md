@@ -14,15 +14,15 @@ comments: false
 + `sudo apt-get install google-chrome-stable`
 
 ## 安装xvfb
-+ sudo apt-get install google-chrome-stable
++ `sudo apt-get install google-chrome-stable`
 
 ## 安装ChromeDriver
-+ sudo apt-get install unzip
-+ wget -N http://chromedriver.storage.googleapis.com/2.XX/chromedriver_linux64.zip
-+ unzip chromedriver_linux64.zip
-+ sudo mv -f chromedriver /usr/local/share/chromedriver
-+ sudo ln -s /usr/local/share/chromedriver /usr/local/bin/chromedriver
-+ sudo ln -s /usr/local/share/chromedriver /usr/bin/chromedriver
++ `sudo apt-get install unzip`
++ `wget -N http://chromedriver.storage.googleapis.com/2.XX/chromedriver_linux64.zip`
++ `unzip chromedriver_linux64.zip`
++ `sudo mv -f chromedriver /usr/local/share/chromedriver`
++ `sudo ln -s /usr/local/share/chromedriver /usr/local/bin/chromedriver`
++ `sudo ln -s /usr/local/share/chromedriver /usr/bin/chromedriver`
 
 # 使用方式
 
@@ -30,8 +30,8 @@ comments: false
 
 ## Python
 ### 安装
-+ sudo apt-get install python-pip
-+ pip install pyvirtualdisplay selenium
++ `sudo apt-get install python-pip`
++ `pip install pyvirtualdisplay selenium`
 
 ### 脚本
 ```python
